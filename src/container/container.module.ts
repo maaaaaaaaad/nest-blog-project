@@ -7,7 +7,7 @@ import { blogDataSchema } from './schemas/blog-data.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: 'PostData', schema: blogDataSchema, collection: 'post-db' },
+      { name: 'PostData', schema: blogDataSchema, collection: 'allpost' },
     ]),
   ],
   providers: [ContainerService],

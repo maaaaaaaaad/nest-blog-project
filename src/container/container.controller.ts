@@ -1,5 +1,5 @@
 import { CreatePostDTO } from './dto/blog-data.dto';
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { ContainerService } from './container.service';
 import { Response } from 'express';
 import { HttpStatus } from '@nestjs/common';
@@ -14,6 +14,16 @@ export class ContainerController {
 
     return res.status(HttpStatus.OK).json({
       successMessage: 'Post data complete!',
+      data,
+    });
+  }
+
+  @Get('/:postDataId')
+  async getOnePost(@Param('postDataId') id: string, @Res() res: Response) {
+    const data = await this.service.getOnePostData(id);
+
+    return res.status(HttpStatus.OK).json({
+      getMessage: `Get post data by id: ${id}`,
       data,
     });
   }

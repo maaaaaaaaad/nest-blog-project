@@ -13,4 +13,8 @@ export class ContainerService {
   async addNewPostData(createPost: CreatePostDTO): Promise<PostData> {
     return await this.postModel.create(createPost);
   }
+
+  async getOnePostData(id: string): Promise<PostData> {
+    return await this.postModel.findById(id);
+  }
 }

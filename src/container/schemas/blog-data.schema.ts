@@ -6,7 +6,7 @@ export const blogDataSchema = new mongoose.Schema(
     description: String,
     body: String,
     author: String,
-    date_posted: String,
+    data_posted: String,
   },
   {
     versionKey: false,

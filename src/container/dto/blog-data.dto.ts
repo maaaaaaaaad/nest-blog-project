@@ -14,5 +14,5 @@ export class CreatePostDTO {
   readonly author: string;
 
   @IsString()
-  readonly date_posted: string;
+  readonly data_posted: string;
 }

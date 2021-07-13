@@ -15,6 +15,7 @@ import {
 import { ContainerService } from './container.service';
 import { Response } from 'express';
 import { HttpStatus } from '@nestjs/common';
+import { ValidateId } from './shared/pipes/validate-id.pipe';
 
 @Controller('container')
 export class ContainerController {
@@ -43,7 +44,10 @@ export class ContainerController {
   }
 
   @Get('/post/:postDataId')
-  async getOnePost(@Param('postDataId') id: string, @Res() res: Response) {
+  async getOnePost(
+    @Param('postDataId', new ValidateId()) id: string,
+    @Res() res: Response,
+  ) {
     const data = await this.service.getOnePostData(id);
 
     if (!data) throw new NotFoundException('Not found post data');
@@ -56,14 +60,13 @@ export class ContainerController {
 
   @Patch('/post/update')
   async updatePost(
-    @Query('id') updatePostId: string,
+    @Query('id', new ValidateId()) updatePostId: string,
     @Body() updateData: UpdatePostData,
     @Res() res: Response,
   ) {
     //
     this.service.updatePostData(updatePostId, updateData);
 
-    if (!updatePostId) throw new NotFoundException('No post ID');
     if (!updateData) throw new NotFoundException('Update does not excute!');
 
     return res.status(HttpStatus.OK).json({
@@ -72,14 +75,16 @@ export class ContainerController {
   }
 
   @Delete('/post/delete')
-  async deletePost(@Query('id') deletePostId: string, @Res() res: Response) {
+  async deletePost(
+    @Query('id', new ValidateId()) deletePostId: string,
+    @Res() res: Response,
+  ) {
     const deletedData = this.service.deletePostData(deletePostId);
 
     if (!deletedData) throw new NotFoundException('Not found post data');
 
     return res.status(HttpStatus.OK).json({
       deleteMessage: 'Delete you selected data!',
-      deletedData,
     });
   }
 }

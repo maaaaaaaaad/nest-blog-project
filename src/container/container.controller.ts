@@ -3,11 +3,13 @@ import { CreatePostDTO } from './dto/blog-data.dto';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
   Patch,
   Post,
+  Query,
   Res,
 } from '@nestjs/common';
 import { ContainerService } from './container.service';
@@ -32,15 +34,19 @@ export class ContainerController {
   async getAllPost(@Res() res: Response) {
     const datas = await this.service.getAllPostData();
 
+    if (datas.length === 0) throw new NotFoundException('Not found any datas!');
+
     return res.status(HttpStatus.OK).json({
       getAlldataSuccessMessage: 'Get all post data!',
       datas,
     });
   }
 
-  @Get('/:postDataId')
+  @Get('/post/:postDataId')
   async getOnePost(@Param('postDataId') id: string, @Res() res: Response) {
     const data = await this.service.getOnePostData(id);
+
+    if (!data) throw new NotFoundException('Not found post data');
 
     return res.status(HttpStatus.OK).json({
       getMessage: `Get post data by id: ${id}`,
@@ -48,21 +54,32 @@ export class ContainerController {
     });
   }
 
-  @Patch('/update/:updatePostId')
+  @Patch('/post/update')
   async updatePost(
-    @Param('updatePostId') updatePostId: string,
+    @Query('id') updatePostId: string,
     @Body() updateData: UpdatePostData,
     @Res() res: Response,
   ) {
     //
     this.service.updatePostData(updatePostId, updateData);
 
-    if (!updateData) {
-      throw new NotFoundException('Update does not excute!');
-    }
+    if (!updatePostId) throw new NotFoundException('No post ID');
+    if (!updateData) throw new NotFoundException('Update does not excute!');
 
     return res.status(HttpStatus.OK).json({
       updatedMessage: 'Update complete!',
+    });
+  }
+
+  @Delete('/post/delete')
+  async deletePost(@Query('id') deletePostId: string, @Res() res: Response) {
+    const deletedData = this.service.deletePostData(deletePostId);
+
+    if (!deletedData) throw new NotFoundException('Not found post data');
+
+    return res.status(HttpStatus.OK).json({
+      deleteMessage: 'Delete you selected data!',
+      deletedData,
     });
   }
 }

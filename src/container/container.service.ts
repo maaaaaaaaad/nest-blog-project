@@ -32,4 +32,8 @@ export class ContainerService {
       new: true,
     });
   }
+
+  async deletePostData(id: string): Promise<any> {
+    return await this.postModel.findByIdAndRemove(id);
+  }
 }

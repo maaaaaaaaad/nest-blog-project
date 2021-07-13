@@ -8,6 +8,7 @@ import { ContainerModule } from './container/container.module';
   imports: [
     MongooseModule.forRoot('mongodb://localhost/nest-blog', {
       useNewUrlParser: true,
+      useFindAndModify: false,
     }),
     ContainerModule,
   ],

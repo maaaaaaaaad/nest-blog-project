@@ -1,5 +1,15 @@
+import { UpdatePostData } from './dto/update-data.dto';
 import { CreatePostDTO } from './dto/blog-data.dto';
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { ContainerService } from './container.service';
 import { Response } from 'express';
 import { HttpStatus } from '@nestjs/common';
@@ -35,6 +45,24 @@ export class ContainerController {
     return res.status(HttpStatus.OK).json({
       getMessage: `Get post data by id: ${id}`,
       data,
+    });
+  }
+
+  @Patch('/update/:updatePostId')
+  async updatePost(
+    @Param('updatePostId') updatePostId: string,
+    @Body() updateData: UpdatePostData,
+    @Res() res: Response,
+  ) {
+    //
+    this.service.updatePostData(updatePostId, updateData);
+
+    if (!updateData) {
+      throw new NotFoundException('Update does not excute!');
+    }
+
+    return res.status(HttpStatus.OK).json({
+      updatedMessage: 'Update complete!',
     });
   }
 }

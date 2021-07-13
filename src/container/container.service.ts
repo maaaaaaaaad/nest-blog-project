@@ -1,3 +1,4 @@
+import { UpdatePostData } from './dto/update-data.dto';
 import { CreatePostDTO } from './dto/blog-data.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -20,5 +21,15 @@ export class ContainerService {
 
   async getOnePostData(id: string): Promise<PostData> {
     return await this.postModel.findById(id);
+  }
+
+  async updatePostData(
+    id: string,
+    updatePostData: UpdatePostData,
+  ): Promise<PostData> {
+    //
+    return await this.postModel.findByIdAndUpdate(id, updatePostData, {
+      new: true,
+    });
   }
 }

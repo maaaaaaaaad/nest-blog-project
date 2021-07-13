@@ -18,6 +18,16 @@ export class ContainerController {
     });
   }
 
+  @Get('/post')
+  async getAllPost(@Res() res: Response) {
+    const datas = await this.service.getAllPostData();
+
+    return res.status(HttpStatus.OK).json({
+      getAlldataSuccessMessage: 'Get all post data!',
+      datas,
+    });
+  }
+
   @Get('/:postDataId')
   async getOnePost(@Param('postDataId') id: string, @Res() res: Response) {
     const data = await this.service.getOnePostData(id);

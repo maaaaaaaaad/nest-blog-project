@@ -14,6 +14,10 @@ export class ContainerService {
     return await this.postModel.create(createPost);
   }
 
+  async getAllPostData(): Promise<PostData[]> {
+    return await this.postModel.find().exec();
+  }
+
   async getOnePostData(id: string): Promise<PostData> {
     return await this.postModel.findById(id);
   }
